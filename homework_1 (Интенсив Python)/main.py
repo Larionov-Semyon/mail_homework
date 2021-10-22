@@ -8,7 +8,6 @@ from combinations import combinations
 
 class TicTacGame:
     """Класс игры крестики-нолики"""
-    n = 3
 
     def __init__(self):
         self.count = 3
