@@ -1,7 +1,7 @@
 
 class CustomMeta(type):
     """Метакласс: в начале названий всех атрибутов и методов (кроме магических) добавляет префикс "custom_"""
-    def __new__(cls, clsname, bases, dct):
+    def __call__(self, *args, **kwargs):
         attr = {}
         for name, val in dct.items():
             if not name.startswith('__'):
@@ -9,7 +9,32 @@ class CustomMeta(type):
             else:
                 attr[name] = val
 
-        return type.__new__(cls, clsname, bases, attr)
+        print(attr, dct)
+        return super().__call__(cls, clsname, bases, attr)
+        # return super(CustomMeta, cls).__init__(cls, name, bases, attr)
+
+    # def __new__(cls, clsname, bases, dct):
+    #     attr = {}
+    #     for name, val in dct.items():
+    #         if not name.startswith('__'):
+    #             attr[f'custom_{name}'] = val
+    #         else:
+    #             attr[name] = val
+    #
+    #     print(attr, dct)
+    #     return super().__new__(cls, clsname, bases, attr)
+    #     # return super(CustomMeta, cls).__init__(cls, name, bases, attr)
+
+    # def __init__(cls, name, bases, nmspc):
+    #     print(f'MetaBase.__init__{nmspc.__init__}\n')
+    #     attr = {}
+    #     for name, val in nmspc.items():
+    #         if not name.startswith('__'):
+    #             attr[f'custom_{name}'] = val
+    #         else:
+    #             attr[name] = val
+    #     # print(attr)
+    #     return super().__init__(name, bases, attr)
 
 
 class CustomClass(metaclass=CustomMeta):
@@ -23,10 +48,13 @@ class CustomClass(metaclass=CustomMeta):
         return 100
 
 
-inst = CustomClass()
-print(inst.custom_x)
-print(inst.val)
-print(inst.custom_line())
+if __name__ == '__main__':
+    inst = CustomClass()
+    print(dir(inst))
+    print(inst.custom_x)
+    # print(inst.custom_val)
+    # print(inst.custom_line())
+    # print(inst.val)
 
 # ERROR
 # print(dir(inst))

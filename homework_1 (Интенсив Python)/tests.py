@@ -12,6 +12,7 @@ class TestTicTacGame(unittest.TestCase):
     def setUp(self):
         self.game = TicTacGame()
 
+# нет буквенной проверки ввода
     def test_validate_input(self):
         """Тест правильного ввода имени игрока"""
         for i in range(1, self.game.count + 1):
@@ -31,6 +32,7 @@ class TestTicTacGame(unittest.TestCase):
             self.game.board = text_comb
             self.assertEqual(self.game.check_winner(), win)
 
+# слишком сложно для понимания
     @classmethod
     def _make_test_combinations(cls, test):
         test.append(({i: i for i in range(1, 10)}, None))
