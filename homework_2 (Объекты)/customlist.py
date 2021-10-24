@@ -1,8 +1,17 @@
-class CustomList(list):
-    def __init__(self, *args):
-        super(CustomList, self).__init__(args[0])
+"""
+    Кастомный класс списка
+    - Можно вычитать из другого [5, 1, 3, 7] - [1, 2, 7] = [4, -1, -4, 7];
+    - Можно складывать с другим [5, 1, 3, 7] + [1, 2, 7] = [6, 3, 10, 7];
+    - При сравнении списков должна сравниваться сумма элементов списков;
+"""
 
-    def _add(self, other):
+
+class CustomList(list):
+    """Класс, отнаследованный от списка"""
+    def __init__(self, *args):
+        super().__init__(args[0])
+
+    def __add__(self, other):
         new_list = []
         for i in range(max(len(self), len(other))):
             if i < min(len(self), len(other)):
@@ -13,15 +22,7 @@ class CustomList(list):
                 new_list.append(self[i])
         return self.__class__(new_list)
 
-    def __radd__(self, other):
-        return self._add(other)
-
-    def __add__(self, other):
-        return self._add(other)
-
-    def _sub(self, other):
-        # return self.__class__(*[item for item in self if item not in other])
-        # print('sub')
+    def __sub__(self, other):
         new_list = []
         for i in range(max(len(self), len(other))):
             if i < min(len(self), len(other)):
@@ -32,25 +33,34 @@ class CustomList(list):
                 new_list.append(self[i])
         return self.__class__(new_list)
 
-    def __sub__(self, other):
-        return self._sub(other)
+    def __radd__(self, other):
+        return CustomList(other) + self
 
     def __rsub__(self, other):
         return CustomList(other) - self
 
     def __eq__(self, other):
+        """Равно =="""
         return sum(self) == sum(other)
 
+    def __ne__(self, other):
+        """Не равно !="""
+        return sum(self) != sum(other)
+
     def __gt__(self, other):
+        """Больше >"""
         return sum(self) > sum(other)
 
     def __lt__(self, other):
+        """Меньше <"""
         return sum(self) < sum(other)
 
     def __ge__(self, other):
+        """Больше или равно >="""
         return sum(self) >= sum(other)
 
     def __le__(self, other):
+        """Меньше или равно <="""
         return sum(self) <= sum(other)
 
 
