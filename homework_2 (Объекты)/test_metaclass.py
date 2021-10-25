@@ -56,3 +56,12 @@ class TestCustomMeta(unittest.TestCase):
         self.assertEqual(self.inst.custom_val, 99)
         with self.assertRaises(AttributeError):
             self.inst.val
+
+    def test_add_attr(self):
+        """Тест на добавления аттрибута
+        P.S. При реализации метакласса через __call__ тест не будет проходить
+        """
+        self.inst.new = 10
+        with self.assertRaises(AttributeError):
+            self.inst.new
+        self.assertEqual(self.inst.custom_new, 10)

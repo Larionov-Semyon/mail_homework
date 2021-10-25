@@ -7,18 +7,25 @@ class CustomMeta(type):
     (кроме магических) добавляет префикс 'custom_'
     """
 
-    def __new__(cls, key, bases, classdict):
+    def __new__(cls, name, bases, classdict):
         """Изменение названия атрибутов и методов класса"""
-        # print('META NEW')
-        new_dict = cls._add_prefix_custom(classdict)
-        return super().__new__(cls, key, bases, new_dict)
+        # переопределим __setattr__
+        def __setattr__(self, key, value):
+            if key.startswith('__') and key.endswith('__'):
+                object.__setattr__(self, key, value)
+            else:
+                object.__setattr__(self, 'custom_' + key, value)
 
-    def __call__(cls, *args, **kwargs):
-        """Изменение названия атрибутов экземпляра"""
-        # print('META CALL')
-        obj = type.__call__(cls, *args, **kwargs)
-        obj.__dict__ = cls._add_prefix_custom(obj.__dict__)
-        return obj
+        new_dict = cls._add_prefix_custom(classdict)
+        new_dict['__setattr__'] = __setattr__
+        return super().__new__(cls, name, bases, new_dict)
+
+    # def __call__(cls, *args, **kwargs):
+    #     """Изменение названия атрибутов экземпляра"""
+    #     # print('META CALL')
+    #     obj = type.__call__(cls, *args, **kwargs)
+    #     obj.__dict__ = cls._add_prefix_custom(obj.__dict__)
+    #     return obj
 
     @staticmethod
     def _add_prefix_custom(old_dict):
@@ -52,6 +59,8 @@ class CustomClass(metaclass=CustomMeta):
 if __name__ == '__main__':
     inst = CustomClass()
     # print(dir(inst))
+    # inst.xxx = 10
+    # print(inst.custom_xxx)
     print('END --- ', [i for i in dir(inst) if not i.startswith('__')])
     print('custom_x', inst.custom_x)    # 50
     print('custom_line()', inst.custom_line())  # 100
