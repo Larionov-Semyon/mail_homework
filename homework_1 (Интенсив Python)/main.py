@@ -3,7 +3,7 @@
 """
 
 import os
-from combinations import combinations
+from combinations import combinations, start_board
 
 
 class TicTacGame:
@@ -12,7 +12,7 @@ class TicTacGame:
     def __init__(self):
         self.count = 3
         self.players = {0: ['player1', 'o'], 1: ['player2', '+']}
-        self.board = {i: i for i in range(1, self.count ** 2 + 1)}
+        self.board = start_board(self.count)
 
     def input_name(self, text):
         """Проверка на ввод имени игрока

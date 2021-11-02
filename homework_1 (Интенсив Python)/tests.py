@@ -5,6 +5,7 @@
 import unittest
 from unittest.mock import patch
 from main import TicTacGame
+from combinations import start_board
 
 
 class TestTicTacGame(unittest.TestCase):
@@ -12,17 +13,33 @@ class TestTicTacGame(unittest.TestCase):
     def setUp(self):
         self.game = TicTacGame()
 
-# нет буквенной проверки ввода
     def test_validate_input(self):
-        """Тест правильного ввода имени игрока"""
+        """Тест правильного ввода"""
         for i in range(1, self.game.count + 1):
             self.assertTrue(self.game.validate_input(str(i)))
 
+# добавил проверку при вводе во время игры букв
     @patch('builtins.print')
     def test_invalidate_input(self, _):
-        """Тест неправильного ввода имени игрока"""
-        for i in [-1, 0, self.game.count ** 2 + 1, self.game.count ** 2 * 2]:
+        """Тест неправильного ввода"""
+        for i in [-1, 0, self.game.count ** 2 + 1, self.game.count ** 2 * 2, 'c', 'str']:
             self.assertFalse(self.game.validate_input(str(i)))
+
+# добавил проверку на свободную или занятую клетку
+    @patch('builtins.print')
+    def test_repeated_input(self, _):
+        """
+        Проверка на ввод уже занятой клетки и свободной клетки
+        o | x | 3
+        4 | 5 | 6
+        7 | 8 | 9
+        """
+        self.game.board = start_board(self.game.count)
+        self.game.board[1] = 'o'
+        self.game.board[2] = 'x'
+        self.assertFalse(self.game.validate_input('1'))
+        self.assertFalse(self.game.validate_input('2'))
+        self.assertTrue(self.game.validate_input('3'))
 
     def test_check_winner(self):
         """Тест на проверку чьей то победы"""
@@ -32,16 +49,71 @@ class TestTicTacGame(unittest.TestCase):
             self.game.board = text_comb
             self.assertEqual(self.game.check_winner(), win)
 
-# слишком сложно для понимания
-    @classmethod
-    def _make_test_combinations(cls, test):
-        test.append(({i: i for i in range(1, 10)}, None))
-        test.append(({i: i if not (i in (1, 2, 3)) else 'o' for i in range(1, 10)}, 'player1'))
-        test.append(({i: i if not (i in (2, 5, 8)) else 'o' for i in range(1, 10)}, 'player1'))
-        test.append(({i: i if not (i in (1, 5, 9)) else '+' for i in range(1, 10)}, 'player2'))
-        test.append(({i: i if not (i in (3, 5, 7)) else '+' for i in range(1, 10)}, 'player2'))
-        test.append(({i: i if not (i in (3, 6, 9)) else 'o' for i in range(1, 10)}, 'player1'))
-        test.append(({1: 'o', 2: '+', 3: '+', 4: 'x', 5: 'o', 6: 'o', 7: 'o', 8: '+', 9: '+'},
+# упростил для понимания
+    def _make_test_combinations(self, test):
+        new_board = start_board(self.game.count)
+        """
+        1 | 2 | 3
+        4 | 5 | 6
+        7 | 8 | 9
+        """
+        test.append((new_board, None))
+        """
+        o | o | o
+        4 | 5 | 6
+        7 | 8 | 9
+        """
+        board = new_board.copy()
+        board[1] = 'o'
+        board[2] = 'o'
+        board[3] = 'o'
+        test.append((board, 'player1'))
+        """
+        1 | o | 3
+        4 | o | 6
+        7 | o | 9
+        """
+        board = new_board.copy()
+        board[2] = 'o'
+        board[5] = 'o'
+        board[8] = 'o'
+        test.append((board, 'player1'))
+        """
+        + | 2 | 3
+        4 | + | 6
+        7 | 8 | +
+        """
+        board = new_board.copy()
+        board[1] = '+'
+        board[5] = '+'
+        board[9] = '+'
+        test.append((board, 'player2'))
+        """
+        1 | 2 | +
+        4 | + | 6
+        + | 8 | 9
+        """
+        board = new_board.copy()
+        board[3] = '+'
+        board[5] = '+'
+        board[7] = '+'
+        test.append((board, 'player2'))
+        """
+        1 | 2 | o
+        4 | 5 | o
+        7 | 8 | o
+        """
+        board = new_board.copy()
+        board[3] = 'o'
+        board[6] = 'o'
+        board[9] = 'o'
+        test.append((board, 'player1'))
+        """
+        o | + | +
+        + | o | o
+        o | + | +
+        """
+        test.append(({1: 'o', 2: '+', 3: '+', 4: '+', 5: 'o', 6: 'o', 7: 'o', 8: '+', 9: '+'},
                      'IS MISSING (Победитель отсутствует)'))
 
 
