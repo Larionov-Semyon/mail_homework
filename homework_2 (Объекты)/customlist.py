@@ -72,7 +72,7 @@ if __name__ == '__main__':
     print(a - b)
     print(b - a)
     print([1, 3] - a)
-    print(a - [1, 3])
+    print(type(a - [1, 3]))
     # print(a - [1, 2])
     # print([1, 2] + a)
     # print(type(a + b))

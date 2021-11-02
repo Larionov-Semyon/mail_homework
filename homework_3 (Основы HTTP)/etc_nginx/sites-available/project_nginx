@@ -1,0 +1,33 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name project_nginx.com www.project_nginx.com;
+	
+	location / {
+		root /var/www/project_nginx/html;
+		index index.html index.htm;
+	}
+
+	location ~* \.(jpg|jpeg|gif|png)$ {
+		root /home/semyon/projectname/public;
+	}
+	
+	location ^~ /API/ {
+		proxy_pass http://127.0.0.1:8000/;
+	}
+}
+
+#server {
+#	listen 80;
+#	listen [::]:80;
+#
+#	server_name project_nginx.com www.project_nginx.com;
+#
+#	root /var/www/project_nginx/html;
+#	index index.html index.htm;
+#
+#	location / {
+#		try_files $uri $uri/ =404;
+#	}
+#}
