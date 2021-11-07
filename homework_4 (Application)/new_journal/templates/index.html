@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+<!--  <title>Home page</title>-->
+</head>
+<body>
+<img src= "{% static 'img/2.png' %}" height="100">
+<p>Добро пожаловать в проект</p>
+<p>Хотите добавить свою новость? <a href="add_post">Перейти</a></p>
+  {% if contents %}
+    <ul>
+      {% for content in contents %}
+        <li>
+          <a href="post/{{content.ID}}">{{content.TITLE}}</a></li>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No contents are available.</p>
+  {% endif %}
+</body>
+</html>
