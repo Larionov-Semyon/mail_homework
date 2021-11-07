@@ -1,6 +1,6 @@
 from django.http.response import JsonResponse
 # from django.shortcuts import render
-from local_settings import LOCAL_DATABASE
+from database import LOCAL_DATABASE
 
 
 def show_post(request, post_id):
