@@ -1,7 +1,6 @@
 from django.urls import path, include
-from .views import index, create_new_post
+from .views import index
 
 urlpatterns = [
     path('', index, name='index'),
-    path('add_post/', create_new_post, name='create_new_post'),
 ]

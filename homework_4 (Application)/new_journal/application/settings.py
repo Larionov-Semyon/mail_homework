@@ -13,7 +13,7 @@ import os.path
 from pathlib import Path
 
 try:
-    from local_settings import LOCAL_SECRET_KEY
+    from local_settings import LOCAL_SECRET_KEY, LOCAL_AUTHORIZATION_FOR_DATABASE
 except ImportError:
     print('ImportError: Not found local_setting in application/settings.py')
     exit()
@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'application.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'db_new_journal',
+        'USER': LOCAL_AUTHORIZATION_FOR_DATABASE['user'],
+        'PASSWORD': LOCAL_AUTHORIZATION_FOR_DATABASE['password'],
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
