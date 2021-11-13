@@ -1,6 +1,5 @@
 from django.views.decorators.http import require_GET
 from django.shortcuts import render
-# from database import LOCAL_DATABASE
 from posts.models import Post
 from main_page.models import Category
 
