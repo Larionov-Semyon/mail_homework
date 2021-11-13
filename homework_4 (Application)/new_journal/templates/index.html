@@ -3,17 +3,22 @@
 <html>
 <head>
   <meta charset="utf-8">
-<!--  <title>Home page</title>-->
+  <title>Главная страница</title>
 </head>
 <body>
 <img src= "{% static 'img/2.png' %}" height="100">
 <p>Добро пожаловать в проект</p>
+<p>
+  {% for category in categories %}
+    <a href="{{category.name}}">{{category.name}}</a></li>
+  {% endfor %}
+</p>
 <p>Хотите добавить свою новость? <a href="post/add">Перейти</a></p>
   {% if contents %}
     <ul>
       {% for content in contents %}
         <li>
-          <a href="post/{{content.ID}}">{{content.TITLE}}</a></li>
+          <a href="post/{{content.id}}">{{content.title}}</a></li>
         </li>
       {% endfor %}
     </ul>

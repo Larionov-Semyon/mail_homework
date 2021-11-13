@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+<h1>{{ post.title }}</h1>
+<p><b>Автор:</b> {{ post.author }}</p>
+<p><b>Дата:</b> {{ post.date }}</p>
+<p><b>Категория:</b>
+    {% for category in post.categories.all%}
+    <a href="/{{category}}/">{{category}}</a>
+    {% endfor %}
+</p>
+<p>{{ post.content }}</p>
+
+<a href="update">Изменить</a>
+<br> <br>
+<a href="delete">Удалить</a>
+</body>
+</html>

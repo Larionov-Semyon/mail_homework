@@ -3,17 +3,19 @@
 <html>
 <head>
     <meta charset="UTF-8">
-<!--    <title>Форма создания нового поста</title>-->
+    <title>Создание поста</title>
 </head>
 <body>
 <form action="" method="post" name="form">
-    <br>
-    Title: <input name="title" type="text" value=""><br><br>
-    Author: <input name="author" type="text" value=""><br><br>
-<!--    Main image: <input name="main_img" type="text" value=""><br><br>-->
-    Text: <input name="text" type="text" value=""><br><br>
+    {% csrf_token %}
+    {{ form.as_p }}
 
-    <input type="submit" name="add" value="add post">
+<!--    Title: <input name="title" type="text" value=""><br><br>-->
+<!--    Author: <input name="author" type="text" value=""><br><br>-->
+<!--&lt;!&ndash;    Main image: <input name="main_img" type="text" value=""><br><br>&ndash;&gt;-->
+<!--    Text: <input name="text" type="text" value=""><br><br>-->
+
+    <input type="submit" name="add_post" value="add post">
 </form>
 </body>
 </html>

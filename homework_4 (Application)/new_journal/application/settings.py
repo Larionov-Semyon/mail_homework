@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'application.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_new_journal',
+        'NAME': 'db_project',
         'USER': LOCAL_AUTHORIZATION_FOR_DATABASE['user'],
         'PASSWORD': LOCAL_AUTHORIZATION_FOR_DATABASE['password'],
         'HOST': 'localhost',
@@ -94,6 +94,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.MyUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
