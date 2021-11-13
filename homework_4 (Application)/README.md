@@ -11,3 +11,7 @@
 
 Как выглядит local_setting
 > LOCAL_SECRET_KEY = 'ключ'
+
+Лучший действенный способ решения проблем:
+> DROP DATABASE db_project;
+> CREATE DATABASE db_project OWNER smb_user;
