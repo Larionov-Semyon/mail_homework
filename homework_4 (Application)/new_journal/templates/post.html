@@ -11,7 +11,7 @@
 <p><b>Дата:</b> {{ post.date }}</p>
 <p><b>Категория:</b>
     {% for category in post.categories.all%}
-    <a href="/{{category}}/">{{category}}</a>
+    <a href="/{{category.url}}/">{{category}}</a>
     {% endfor %}
 </p>
 <p>{{ post.content }}</p>

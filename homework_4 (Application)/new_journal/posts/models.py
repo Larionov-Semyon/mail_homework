@@ -1,6 +1,7 @@
 from django.db import models
-from main_page.models import Category
 from django.conf import settings
+from django.shortcuts import reverse
+from main_page.models import Category
 
 
 class Post(models.Model):
@@ -21,8 +22,7 @@ class Post(models.Model):
     content = models.CharField(verbose_name='Контент', max_length=128)
 
     def get_absolute_url(self):
-        # need to change
-        return f'/post/{self.id}'
+        return reverse('show_post', kwargs={'post_id': self.id})
 
     def __str__(self):
         return self.title
