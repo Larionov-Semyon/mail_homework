@@ -1,5 +1,5 @@
 from django.views.decorators.http import require_http_methods, require_GET
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from .models import Post
 from .forms import PostForm
