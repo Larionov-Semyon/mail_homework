@@ -1,5 +1,5 @@
 from django.views.decorators.http import require_http_methods, require_GET
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import Http404
 from .models import Post
 from .forms import PostForm
@@ -25,7 +25,7 @@ def create_post(request):
     if request.method == 'GET' or request.method == 'PUT':
         form = PostForm()
         context = {
-            'form': PostForm()
+            'form': form,
         }
         return render(request, "add_post.html", context=context)
 
@@ -51,6 +51,7 @@ def update_post(request, post_id):
 @require_http_methods(["GET", "POST"])
 def delete_post(request, post_id):
     """Удаление поста"""
+    # можно удалять без get_object
     data = get_object_or_404(Post, id=post_id)
 
     if request.method == 'POST':
