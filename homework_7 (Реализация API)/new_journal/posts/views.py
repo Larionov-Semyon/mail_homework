@@ -3,6 +3,27 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import Http404
 from .models import Post
 from .forms import PostForm
+from django.core.exceptions import ValidationError
+
+from .serializers import PostSerializer
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    """
+    View для постов
+    Пользователи могут создавать, изменять, удалять посты.
+    Неавторизованные только использовать методы GET.
+    """
+    queryset = Post.objects.order_by('-published_at')
+    serializer_class = PostSerializer
+    # разрешение
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 @require_GET

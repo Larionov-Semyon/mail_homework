@@ -15,9 +15,21 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.contrib import admin
+from rest_framework.routers import DefaultRouter
+
+from posts.views import PostViewSet
+from main_page.views import CategoryViewSet
+from users.views import UserViewSet
+
+router = DefaultRouter()
+router.register(r'api/posts', PostViewSet, basename='posts')
+router.register(r'api/categories', CategoryViewSet, basename='main_page')
+router.register(r'api/users', UserViewSet, basename='users')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main_page.urls'), name='main_page'),
     path('post/', include('posts.urls'), name='posts'),
 ]
+
+urlpatterns += router.urls
