@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Главная страница</title>
-</head>
-<body>
-{% if active_category %}
-<p>Вы смотрите категорию: {{active_category}}</p>
-{% else %}
-<img src= "{% static 'img/2.png' %}" height="100">
-<p>Добро пожаловать в проект</p>
-{% endif %}
-<p>
-  <a href="/">Всё</a>
-  {% for category in categories %}
-    <a href="/{{category.url}}/">{{category.name}}</a>
-  {% endfor %}
-</p>
-<p>Хотите добавить свою новость? <a href="/post/add/">Перейти</a></p>
+{% extends 'base.html' %}
+{% block content %}
+
   {% if contents %}
     <ul>
       {% for content in contents %}
@@ -30,5 +12,4 @@
   {% else %}
     <p>No contents are available.</p>
   {% endif %}
-</body>
-</html>
+{% endblock %}

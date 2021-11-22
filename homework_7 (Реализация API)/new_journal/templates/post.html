@@ -16,8 +16,10 @@
 </p>
 <p>{{ post.content }}</p>
 
-<a href="update">Изменить</a>
-<br> <br>
-<a href="delete">Удалить</a>
+{% if user.is_authenticated %}
+    <a href="update">Изменить</a>
+    <br> <br>
+    <a href="delete">Удалить</a>
+{% endif %}
 </body>
 </html>

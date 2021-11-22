@@ -13,14 +13,13 @@ import os.path
 from pathlib import Path
 
 try:
-    from local_settings import LOCAL_SECRET_KEY, LOCAL_AUTHORIZATION_FOR_DATABASE
+    from local_settings import LOCAL_SECRET_KEY, LOCAL_AUTHORIZATION_FOR_DATABASE, LOCAL_VK_APP_ID, LOCAL_VK_API_SECRET
 except ImportError:
     print('ImportError: Not found local_setting in application/settings.py')
     exit()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -43,18 +42,30 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'social_django',
     'main_page',
     'posts',
     'users',
 ]
 
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    ]
-}
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# # При использовании PostgreSQL рекомендуется использовать
+# # встроенное поле JSONB для хранения извлеченных
+# # дополнительных_данных. Чтобы включить его, задайте настройку:
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+# REST_FRAMEWORK = {
+#     # Разрешение доступа только для чтения
+#     # пользователям, не прошедшим проверку авторизации.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+#     ]
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -87,7 +98,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'application.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -123,7 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -137,14 +146,24 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+# social media authication
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = LOCAL_VK_APP_ID
+SOCIAL_AUTH_VK_OAUTH2_SECRET = LOCAL_VK_API_SECRET
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.81'
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "static"),
 ]
 
 # Default primary key field type

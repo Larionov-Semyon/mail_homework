@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import Http404
 from .models import Post
 from .forms import PostForm
+from .decorators import authorization_check
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
 from .serializers import PostSerializer
 from rest_framework import viewsets, status
@@ -33,6 +35,8 @@ def show_post(request, post_id):
     return render(request, 'post.html', {'post': post})
 
 
+# @login_required
+@authorization_check
 @require_http_methods(["GET", "POST"])
 def create_post(request):
     """Форма создания нового объекта"""
@@ -51,6 +55,8 @@ def create_post(request):
         return render(request, "add_post.html", context=context)
 
 
+# @login_required
+@authorization_check
 @require_http_methods(["GET", "POST"])
 def update_post(request, post_id):
     """Обновление поста"""
@@ -69,6 +75,8 @@ def update_post(request, post_id):
         return render(request, 'update_post.html', context)
 
 
+# @login_required
+@authorization_check
 @require_http_methods(["GET", "POST"])
 def delete_post(request, post_id):
     """Удаление поста"""
