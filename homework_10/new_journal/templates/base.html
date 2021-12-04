@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+</head>
+<body>
+<div align="center">
+    {% if user.is_authenticated %}
+        <p>Вы вошли как
+            <b>{% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}: </b>
+            <button>
+                <a href="/post/add/">Создать пост</a>
+            </button>
+            <button>
+                <a href="/logout/">Выйти</a>
+            </button>
+        </p>
+
+    {% else %}
+        <p>Пожалуйста, авторизуйтесь
+            <button>
+                <a href="/login/">Войти</a>
+            </button>
+        </p>
+    {% endif %}
+</div>
+<div align="left">
+    <img src= "{% static 'img/2.png' %}" height="100">
+    <p>
+        <a href="/">Всё</a>
+        {% for category in categories %}
+            {% if active_category != category%}
+                <a href="/{{category.url}}/">{{category.name}}</a>
+            {% else %}
+                <b>{{category.name}}</b>
+            {% endif %}
+        {% endfor %}
+    </p>
+</div>
+
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

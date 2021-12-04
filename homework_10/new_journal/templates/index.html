@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  {% if contents %}
+    <ul>
+      {% for content in contents %}
+        <li>
+          <a href="/post/{{content.id}}/">{{content.title}}</a></li>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No contents are available.</p>
+  {% endif %}
+{% endblock %}
