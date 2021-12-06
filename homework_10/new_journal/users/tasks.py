@@ -15,10 +15,9 @@ from datetime import datetime
 def send_verification_email(user_id):
     UserModel = get_user_model()
     try:
-        print('SEND EMAIL !!!')
+        # print('SEND EMAIL !!!')
         user = UserModel.objects.get(pk=user_id)
         send_mail(
-            'Verify your QuickPublisher account',
             'Follow this link to verify your account: '
             'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(user.verification_uuid)}),
             EMAIL_HOST_USER,
@@ -26,7 +25,7 @@ def send_verification_email(user_id):
             fail_silently=False,
         )
     except UserModel.DoesNotExist:
-        logging.warning("Tried to send verification email to non-existing user '%s'" % user_id)
+        print("No-existing user '%s'" % user_id)
 
 
 @shared_task
@@ -34,7 +33,6 @@ def count_users_posts():
     UserModel = get_user_model()
     users = UserModel.objects.filter(is_active=True)
     posts = Post.objects.all()
-    # print('Hell0', len(users), len(posts))
     file = open("out.txt", "a")
     file.write(f'Date-time: {datetime.now()}  active users: {len(users)}  posts: {len(posts)}\n')
     file.close()
