@@ -18,6 +18,7 @@ def send_verification_email(user_id):
         # print('SEND EMAIL !!!')
         user = UserModel.objects.get(pk=user_id)
         send_mail(
+            'Text',
             'Follow this link to verify your account: '
             'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(user.verification_uuid)}),
             EMAIL_HOST_USER,
