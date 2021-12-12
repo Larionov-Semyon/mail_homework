@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<h1>SEARCH...</h1>
+<div>
+
+    <form action="/search/" method="get">
+        <input type="hidden" name="q" value="{{last_q}}">
+        <input type="submit" value="All">
+    </form>
+
+    {% for category in categories %}
+        <form action="/search/" method="get">
+            <input type="hidden" name="q" value="{{last_q}}">
+            <input name="category" type="submit" value="{{category.name}}">
+        </form>
+    {% endfor %}
+</div>
+
+    <form action="/search/" method="get">
+        <input name="q" type="text" placeholder="Search...">
+    </form>
+
+{% if users %}
+Пользователи:
+    <ul>
+        {% for user in users %}
+        <li>
+            {{ user.username }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if contents %}
+Посты:
+    <ul>
+        {% for content in contents %}
+        <li>
+            <a href="/post/{{content.id}}/">{{content.title}}</a>, {{ content.description }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+</body>
+</html>
