@@ -6,9 +6,34 @@ from rest_framework import viewsets
 
 from posts.decorators import authorization_check
 from posts.models import Post
+from posts.documents import PostDocument
+from users.documents import UserDocument
 
 from .models import Category
 from .serializers import CategorySerializer
+
+
+def search(request):
+    list_category = Category.objects.all()
+    q = request.GET.get('q')
+
+    qs = PostDocument.search().filter('multi_match', query=q, fuzziness='auto')
+    qs = qs.to_queryset()
+
+    users = UserDocument.search().filter('multi_match', query=q, fuzziness='auto')
+    users = users.to_queryset()
+
+    category = request.GET.get('category', '')
+    if category:
+        qs = qs.filter(categories__name=category)
+
+    data = {
+        'last_q': q,
+        'categories': list_category,
+        'users': users,
+        'contents': qs,
+    }
+    return render(request, 'search.html', data)
 
 
 def login(request):

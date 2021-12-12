@@ -24,6 +24,11 @@
             </button>
         </p>
     {% endif %}
+
+    <form action="/search/" method="get">
+        <input name="q" type="text" placeholder="Search...">
+    </form>
+
 </div>
 <div align="left">
     <img src= "{% static 'img/2.png' %}" height="100">

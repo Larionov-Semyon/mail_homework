@@ -71,6 +71,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
+    #
     'django_celery_results',
     'celery',
 
@@ -145,6 +149,15 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
+}
+
+# Elasticsearch
+# https://django-elasticsearch-dsl.readthedocs.io/en/latest/settings.html
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200',
+    },
 }
 
 AUTH_USER_MODEL = 'users.MyUser'

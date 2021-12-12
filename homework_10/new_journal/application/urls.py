@@ -28,15 +28,16 @@ router = DefaultRouter()
 router.register(r'api/posts', PostViewSet, basename='posts')
 router.register(r'api/categories', CategoryViewSet, basename='main_page')
 router.register(r'api/users', UserViewSet, basename='users')
+# router.register(r'api/search', SearchViewSet, basename='search')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('social_auth/', include('social_django.urls', namespace='social')),
-    path('', include('main_page.urls'), name='main_page'),
     path('post/', include('posts.urls'), name='posts'),
     path('user/', include('users.urls'), name='users'),
+    path('', include('main_page.urls'), name='main_page'),
 ]
 
 urlpatterns += router.urls

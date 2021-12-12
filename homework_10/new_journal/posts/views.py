@@ -7,25 +7,42 @@ from .decorators import authorization_check
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 
-from .serializers import PostSerializer
+# from .serializers import PostSerializer
+
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+from django_elasticsearch_dsl_drf.constants import \
+    LOOKUP_FILTER_RANGE, \
+    LOOKUP_QUERY_IN, \
+    LOOKUP_QUERY_GT, \
+    LOOKUP_QUERY_GTE, \
+    LOOKUP_QUERY_LT, \
+    LOOKUP_QUERY_LTE
+from django_elasticsearch_dsl_drf.filter_backends import \
+    OrderingFilterBackend, \
+    DefaultOrderingFilterBackend, \
+    SearchFilterBackend
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
-class PostViewSet(viewsets.ModelViewSet):
-    """
-    View для постов
-    Пользователи могут создавать, изменять, удалять посты.
-    Неавторизованные только использовать методы GET.
-    """
-    queryset = Post.objects.order_by('-published_at')
-    serializer_class = PostSerializer
-    # разрешение
-    permission_classes = [IsAuthenticatedOrReadOnly]
+from .documents import PostDocument
+from .serializers import PostDocumentSerializer
 
-    def perform_create(self, serializer):
-        serializer.save()
+
+# class PostViewSet(viewsets.ModelViewSet):
+#     """
+#     View для постов
+#     Пользователи могут создавать, изменять, удалять посты.
+#     Неавторизованные только использовать методы GET.
+#     """
+#     queryset = Post.objects.order_by('-published_at')
+#     serializer_class = PostSerializer
+#     # разрешение
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#
+#     def perform_create(self, serializer):
+#         serializer.save()
 
 
 @require_GET
@@ -90,3 +107,51 @@ def delete_post(request, post_id):
         return redirect(f'/post/{post_id}/')
     elif request.method == 'GET':
         return render(request, 'delete_post.html')
+
+
+class PostViewSet(DocumentViewSet):
+    """Реализация API c возможностью поиска"""
+    document = PostDocument
+    serializer_class = PostDocumentSerializer
+
+    lookup_field = 'id'
+    filter_backends = [
+        SearchFilterBackend,
+        OrderingFilterBackend,
+        DefaultOrderingFilterBackend,
+    ]
+
+    search_fields = (
+        'title',
+        'description',
+        'content',
+    )
+
+    ordering_fields = {
+        'id': 'id',
+        'published_at': 'published_at',
+    }
+
+    ordering = ('id',)
+
+    # filter_fields = {
+    #     'id': {
+    #         'field': 'id',
+    #         'lookups': [
+    #             LOOKUP_FILTER_RANGE,
+    #             LOOKUP_QUERY_IN,
+    #             LOOKUP_QUERY_GT,
+    #             LOOKUP_QUERY_GTE,
+    #             LOOKUP_QUERY_LT,
+    #             LOOKUP_QUERY_LTE,
+    #         ],
+    #     },
+    #     'title': 'title',
+    #     'author': {
+    #         'field': 'author_id',
+    #         'lookups': [
+    #             LOOKUP_QUERY_IN,
+    #         ]
+    #     },
+    #     'published_at': 'published_at',
+    # }
