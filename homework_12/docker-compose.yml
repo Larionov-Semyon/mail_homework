@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  web:
+    build: ./new_journal
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./new_journal/:/usr/src/new_journal/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+#    links:
+#      - db
+  db:
+    # Образ и версия базы, которую мы будем использовать
+    image: postgres
+    # Внешний том(volume) и место где он будет подключен внутри контейнера
+    restart: always
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+#    environment:
+#      - POSTGRES_USER=semyon
+#      - POSTGRES_PASSWORD=20190
+#      - POSTGRES_DB=db
+    env_file:
+      - ./.env.dev
+#
+#volumes:
+#  postgres_volume:
