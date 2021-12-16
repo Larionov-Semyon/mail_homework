@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os.path
 from pathlib import Path
 
-try:
-    from local_settings import LOCAL_SECRET_KEY, LOCAL_AUTHORIZATION_FOR_DATABASE, \
-        LOCAL_VK_APP_ID, LOCAL_VK_API_SECRET, \
-        LOCAL_EMAIL_USER, LOCAL_EMAIL_PASSWORD
-except ImportError:
-    print('ImportError: Not found local_setting in application/settings.py')
-    exit()
+# try:
+#     from local_settings import LOCAL_SECRET_KEY, LOCAL_AUTHORIZATION_FOR_DATABASE, \
+#         LOCAL_VK_APP_ID, LOCAL_VK_API_SECRET, \
+#         LOCAL_EMAIL_USER, LOCAL_EMAIL_PASSWORD
+# except ImportError:
+#     print('ImportError: Not found local_setting in application/settings.py')
+#     exit()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = LOCAL_SECRET_KEY
+SECRET_KEY = os.environ.get("LOCAL_SECRET_KEY", default='django-insecure-^c=muz@%n_l1zh0l-&2y4mkc!65(qw3%y^voj6xsler&z$mve5')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('LOCAL_DEBUG', default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default='localhost').split(" ")
 
 
 # celery conf
@@ -55,8 +55,8 @@ CELERY_BEAT_SCHEDULE = {
 
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 2525
-EMAIL_HOST_USER = LOCAL_EMAIL_USER
-EMAIL_HOST_PASSWORD = LOCAL_EMAIL_PASSWORD
+EMAIL_HOST_USER = os.environ.get("LOCAL_EMAIL_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("LOCAL_EMAIL_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
@@ -140,14 +140,25 @@ WSGI_APPLICATION = 'application.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'db_project',
+#         'USER': LOCAL_AUTHORIZATION_FOR_DATABASE['user'],
+#         'PASSWORD': LOCAL_AUTHORIZATION_FOR_DATABASE['password'],
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_project',
-        'USER': LOCAL_AUTHORIZATION_FOR_DATABASE['user'],
-        'PASSWORD': LOCAL_AUTHORIZATION_FOR_DATABASE['password'],
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('POSTGRES_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('POSTGRES_DB', BASE_DIR / 'db.sqlite3'),
+        'USER': os.environ.get('POSTGRES_USER', 'user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 
@@ -202,8 +213,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = '/'
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = LOCAL_VK_APP_ID
-SOCIAL_AUTH_VK_OAUTH2_SECRET = LOCAL_VK_API_SECRET
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.environ.get("LOCAL_VK_APP_ID")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.environ.get("LOCAL_VK_API_SECRET")
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.81'
 
